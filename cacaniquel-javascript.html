@@ -1,0 +1,85 @@
+<html>
+<head>
+<style>
+
+.casa {
+    float:left; width: 100px; height: 100px; border: solid 1px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div id="casa0" class="casa"></div>
+<div id="casa1" class="casa"></div>
+<div id="casa2" class="casa"></div>
+<div id="casa3" class="casa"></div>
+<div id="casa4" class="casa" style="float: none"></div>
+
+<div style="margin-top:10px">
+Fichas: <span id="fichas"></span>
+<input id="aposta" type="text" size="10">
+<button onclick="apostar()">Apostar</button>
+Aposta: <span id="apostado">0</span>
+</div>
+
+<script>
+
+// cores que podem ser exibidas - quanto maior mais difícil
+var cores = ['red', 'green', 'yellow', 'blue', 'cyan'];
+// casa onde a cor deve ser exibida
+var casaAtual = 0;
+// thread execução por tempo determinado
+var intervalo;
+// total das fichas atuais
+var totalFichas = 1000;
+// total apostado na rodada
+var totalApostado = 0;
+
+var iniciar = () => {
+    casaAtual = 0;
+    totalFichas = 1000;
+    totalApostado = 0;
+    document.getElementById('fichas').innerHTML = totalFichas;
+    document.getElementById('aposta').value = '';
+    document.getElementById('apostado').innerHTML = totalApostado;
+}
+
+var mudarCor = (pos, cor) => {
+    document.getElementById(`casa${pos}`).style.background = cor;
+}
+
+var sortearCor = () => {
+    let id = Math.floor(Math.random() * cores.length);
+    return cores[id];
+}
+
+var rodar = () => {
+
+        mudarCor(casaAtual, sortearCor());
+        casaAtual++;
+        if (casaAtual == 4) {
+            clearInterval(intervalo);
+        }
+
+}
+
+var apostar = () => {
+
+    var apostado = document.getElementById('aposta');
+    totalFichas = totalFichas - apostado.value;
+    totalApostado = totalApostado + parseInt(apostado.value);
+    document.getElementById('fichas').innerHTML = totalFichas;
+    document.getElementById('apostado').innerHTML = totalApostado;
+    apostado.value = '';
+    intervalo = setInterval(rodar, 1000);
+}
+
+iniciar();
+</script>
+
+</body>
+
+</html>
