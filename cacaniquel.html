@@ -31,6 +31,14 @@
             alert('Apostar');
         }
 
+        informarAposta = (evt) => {
+          console.log('Valor informado', evt.target.value);
+        }
+
+        efetivarAposta = (evt) => {
+          console.log('Saiu do campo', evt.target.value);
+        }
+
         render() {
             return <div>
                         <div id="casa0" className="casa"></div>
@@ -40,7 +48,7 @@
                         <div id="casa4" className="casa" style={{float: "none"}}></div>
                         <div style={{marginTop:"10px"}}>
                           Fichas: <span id="fichas"></span>
-                          <input id="aposta" type="text" size="10" />
+                          <input id="aposta" type="text" size="10" onChange={this.informarAposta} onBlur={this.efetivarAposta}/>
                           <button onClick={this.apostar}>Apostar</button>
                           Aposta: <span id="apostado">0</span>
                         </div>
