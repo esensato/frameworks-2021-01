@@ -1,85 +1,123 @@
+<!DOCTYPE html>
 <html>
-<head>
-<style>
+  <head>
+    <meta charset="utf-8" />
+    <title>Caça Níquel</title>
 
-.casa {
-    float:left; width: 100px; height: 100px; border: solid 1px;
-}
+    <style>
+      
+    .casa {
+        float:left; width: 100px; height: 100px; border: solid 1px;
+    }
+      
+    </style>
 
-</style>
+  </head>
+  <body>
 
-</head>
+    <!-- Container principal -->
+    <div id="root"></div>
 
-<body>
+    <!-- Carrega as bibliotecas -->
+    <script src="https://unpkg.com/react@16.8.6/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-<div id="casa0" class="casa"></div>
-<div id="casa1" class="casa"></div>
-<div id="casa2" class="casa"></div>
-<div id="casa3" class="casa"></div>
-<div id="casa4" class="casa" style="float: none"></div>
+    <script type="text/babel">
 
-<div style="margin-top:10px">
-Fichas: <span id="fichas"></span>
-<input id="aposta" type="text" size="10">
-<button onclick="apostar()">Apostar</button>
-Aposta: <span id="apostado">0</span>
-</div>
+    class CacaNiquel extends React.Component {
 
-<script>
+        // cores que podem ser exibidas - quanto maior mais difícil
+        cores = ['red', 'green', 'yellow', 'blue', 'cyan'];
+        // casa onde a cor deve ser exibida
+        casaAtual = 0;
+        // thread execução por tempo determinado
+        intervalo;
 
-// cores que podem ser exibidas - quanto maior mais difícil
-var cores = ['red', 'green', 'yellow', 'blue', 'cyan'];
-// casa onde a cor deve ser exibida
-var casaAtual = 0;
-// thread execução por tempo determinado
-var intervalo;
-// total das fichas atuais
-var totalFichas = 1000;
-// total apostado na rodada
-var totalApostado = 0;
+        constructor(props) {
+          super(props)
+          // this.state = representa o estado interno do componente
+          this.state = {totalFichas: 1000, totalApostado:0, cores:['white', 'white', 'white', 'white']}
 
-var iniciar = () => {
-    casaAtual = 0;
-    totalFichas = 1000;
-    totalApostado = 0;
-    document.getElementById('fichas').innerHTML = totalFichas;
-    document.getElementById('aposta').value = '';
-    document.getElementById('apostado').innerHTML = totalApostado;
-}
-
-var mudarCor = (pos, cor) => {
-    document.getElementById(`casa${pos}`).style.background = cor;
-}
-
-var sortearCor = () => {
-    let id = Math.floor(Math.random() * cores.length);
-    return cores[id];
-}
-
-var rodar = () => {
-
-        mudarCor(casaAtual, sortearCor());
-        casaAtual++;
-        if (casaAtual == 4) {
-            clearInterval(intervalo);
         }
 
-}
+        apostar = () => {
+            
+            let novoTotal = this.state.totalFichas - this.state.totalApostado
+            this.setState({totalFichas: novoTotal})
 
-var apostar = () => {
+            this.intervalo = setInterval(() => {
 
-    var apostado = document.getElementById('aposta');
-    totalFichas = totalFichas - apostado.value;
-    totalApostado = totalApostado + parseInt(apostado.value);
-    document.getElementById('fichas').innerHTML = totalFichas;
-    document.getElementById('apostado').innerHTML = totalApostado;
-    apostado.value = '';
-    intervalo = setInterval(rodar, 1000);
-}
+              // sorteia uma cor dentro do array cores
+              let id = Math.floor(Math.random() * this.cores.length);
+              // ... (spread) obtem cada um dos itens do array
+              let original = [...this.state.cores]
+              console.log(original)
+              original[this.casaAtual] = this.cores[id]
+              console.log(original)
+              this.setState({cores: original})
+              this.casaAtual++
+              if (this.casaAtual == 4) {
+                // interrompe o timer
+                clearInterval(this.intervalo)
+                // avaliar a pontuação obtida
+                let resultado = {}
+                this.state.cores.map((item, idx) => {
+                  
+                    if (resultado[item] == undefined) {
+                      resultado[item] = 1
+                    } else {
+                      resultado[item] = resultado[item] + 1                                        
+                    }
 
-iniciar();
-</script>
+                })
 
-</body>
+                console.log(resultado);
 
+              }
+              
+            }, 1000)
+
+
+        }
+
+        //onChange
+        informarAposta = (evt) => {
+          // evt = gerador do evento (input)
+          // evt.target.value = valor informado no input
+          console.log('Valor informado', evt.target.value);
+        }
+
+        //onBlur
+        efetivarAposta = (evt) => {
+          console.log('Saiu do campo', evt.target.value);
+          this.setState({totalApostado: evt.target.value})
+        }
+
+        render() {
+            return <div>
+                        <div id="casa0" className="casa" style={{background: this.state.cores[0]}}></div>
+                        <div id="casa1" className="casa" style={{background: this.state.cores[1]}}></div>
+                        <div id="casa2" className="casa" style={{background: this.state.cores[2]}}></div>
+                        <div id="casa3" className="casa" style={{background: this.state.cores[3]}}></div>
+                        <div style={{marginTop:"10px", float: "none"}}>
+
+                          Fichas: <span id="fichas">{this.state.totalFichas}</span>
+
+                          <input id="aposta" type="text" size="10" onChange={this.informarAposta} onBlur={this.efetivarAposta}/>
+
+                          <button onClick={this.apostar}>Apostar</button>
+
+                          Aposta: <span id="apostado">{this.state.totalApostado}</span>
+                        </div>
+                    </div>;
+        }
+
+    }
+
+    ReactDOM.render(<CacaNiquel />, document.getElementById('root'));
+
+    </script>
+
+  </body>
 </html>
