@@ -7,7 +7,7 @@
     <style>
       
     .casa {
-        float:left; width: 100px; height: 100px; border: solid 1px;
+        width: 100px; height: 100px; border: solid 1px; display: table-cell;
     }
       
     </style>
@@ -27,30 +27,117 @@
 
     class CacaNiquel extends React.Component {
 
+        // cores que podem ser exibidas - quanto maior mais difícil
+        cores = ['red', 'green', 'yellow', 'blue', 'cyan'];
+        // casa onde a cor deve ser exibida
+        casaAtual = 0;
+        // thread execução por tempo determinado
+        intervalo;
+
+        constructor(props) {
+          super(props)
+          // this.state = representa o estado interno do componente
+          this.state = {totalFichas: 1000, totalApostado:0, cores:['white', 'white', 'white', 'white']}
+
+        }
+
         apostar = () => {
-            alert('Apostar');
+            
+            this.casaAtual = 0;
+            
+            this.setState({cores:['white', 'white', 'white', 'white']})
+
+            this.intervalo = setInterval(() => {
+
+              // sorteia uma cor dentro do array cores
+              let id = Math.floor(Math.random() * this.cores.length);
+              // ... (spread) obtem cada um dos itens do array
+              let original = [...this.state.cores]
+              console.log(original)
+              original[this.casaAtual] = this.cores[id]
+              console.log(original)
+              this.setState({cores: original})
+              this.casaAtual++
+              if (this.casaAtual == 4) {
+                // interrompe o timer
+                clearInterval(this.intervalo)
+                // avaliar a pontuação obtida
+                let resultado = {}
+                this.state.cores.map((item, idx) => {
+                  
+                    if (resultado[item] == undefined) {
+                      resultado[item] = 1
+                    } else {
+                      resultado[item] = resultado[item] + 1                                        
+                    }
+
+                })
+                
+                console.log(resultado)
+                
+
+                for (let cor in resultado) {
+                  // Caso todas as cores forem iguais o jogador recebe o dobro do que foi apostado
+                  if (resultado[cor] == 4) {
+                    let fichas = this.state.totalFichas + this.state.totalApostado * 2
+                    this.setState({totalFichas: fichas})
+                  // Caso tenha ao menos três cores iguais recebe o que apostou de volta  
+                  } else if (resultado[cor] == 3) {
+                    let fichas = this.state.totalFichas + this.state.totalApostado
+                    this.setState({totalFichas: fichas})
+                  // Caso tenha apenas duas cores iguais recebe a metade
+                  } else if (resultado[cor] == 2) {
+                    let fichas = this.state.totalFichas + parseInt(this.state.totalApostado / 2)
+                    this.setState({totalFichas: fichas})                    
+                  }
+                  // Perde tudo caso contrário
+                  this.setState({totalApostado: 0})
+
+                }
+
+              }
+              
+            }, 1000)
+
+
         }
 
+        //onChange
         informarAposta = (evt) => {
+          // evt = gerador do evento (input)
+          // evt.target.value = valor informado no input
           console.log('Valor informado', evt.target.value);
+          this.setState({totalApostado: evt.target.value})
         }
 
+        //onBlur
         efetivarAposta = (evt) => {
           console.log('Saiu do campo', evt.target.value);
+          let fichas = this.state.totalFichas - parseInt(evt.target.value)
+          this.setState({totalFichas: fichas,totalApostado: evt.target.value})
         }
 
         render() {
             return <div>
-                        <div id="casa0" className="casa"></div>
-                        <div id="casa1" className="casa"></div>
-                        <div id="casa2" className="casa"></div>
-                        <div id="casa3" className="casa"></div>
-                        <div id="casa4" className="casa" style={{float: "none"}}></div>
-                        <div style={{marginTop:"10px"}}>
-                          Fichas: <span id="fichas"></span>
-                          <input id="aposta" type="text" size="10" onChange={this.informarAposta} onBlur={this.efetivarAposta}/>
-                          <button onClick={this.apostar}>Apostar</button>
-                          Aposta: <span id="apostado">0</span>
+                      <div style={{display: "table"}}>
+                        <div style={{display: "table-row"}}>
+                        <div id="casa0" className="casa" style={{background: this.state.cores[0]}}></div>
+                        <div id="casa1" className="casa" style={{background: this.state.cores[1]}}></div>
+                        <div id="casa2" className="casa" style={{background: this.state.cores[2]}}></div>
+                        <div id="casa3" className="casa" style={{background: this.state.cores[3]}}></div>
+                        </div>
+                      </div>
+
+                      <div style={{marginTop:"10px"}}>
+                          <span>Fichas: <span id="fichas">{this.state.totalFichas}</span></span>
+
+                          <span style={{"padding":"10px"}}>
+                            <input id="aposta" type="text" size="10" onChange={this.informarAposta} onBlur={this.efetivarAposta} value={this.state.totalApostado}/>
+                          </span>
+
+                          <span><button onClick={this.apostar}>Apostar</button></span>
+
+                          <span style={{"padding":"10px"}}>Aposta: <span id="apostado">{this.state.totalApostado}</span></span>
                         </div>
                     </div>;
         }
