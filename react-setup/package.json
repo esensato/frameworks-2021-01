@@ -1,38 +1,38 @@
 {
-  "name": "react-setup",
-  "version": "1.0.0",
-  "description": "Modelo de setup para react",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node_modules/serve/bin/serve.js dist/assets",
-    "build": "webpack --mode development"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/esensato/frameworks-2021-01.git"
-  },
-  "keywords": [
-    "react"
-  ],
-  "author": "edson.sensato@espm.br",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/esensato/frameworks-2021-01/issues"
-  },
-  "homepage": "https://github.com/esensato/frameworks-2021-01#readme",
-  "dependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "serve": "^11.3.2"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.13.8",
-    "@babel/preset-env": "^7.13.9",
-    "@babel/preset-react": "^7.12.13",
-    "babel-loader": "^8.2.2",
-    "html-webpack-plugin": "^5.2.0",
-    "webpack": "^5.24.3",
-    "webpack-cli": "^4.5.0"
-  }
+    "name": "react-setup",
+    "version": "1.0.0",
+    "description": "Modelo de setup para react",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node_modules/serve/bin/serve.js dist/assets",
+        "build": "webpack --mode development"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/esensato/frameworks-2021-01.git"
+    },
+    "keywords": [
+        "react"
+    ],
+    "author": "edson.sensato@espm.br",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/esensato/frameworks-2021-01/issues"
+    },
+    "homepage": "https://github.com/esensato/frameworks-2021-01#readme",
+    "dependencies": {
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.13.8",
+        "@babel/preset-env": "^7.13.9",
+        "@babel/preset-react": "^7.12.13",
+        "babel-loader": "^8.2.2",
+        "copy-webpack-plugin": "^8.1.0",
+        "html-webpack-plugin": "^5.2.0",
+        "webpack": "^5.24.3",
+        "webpack-cli": "^4.5.0"
+    }
 }
