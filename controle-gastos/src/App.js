@@ -1,11 +1,12 @@
 import './App.css';
 import Login from './Login';
+import NovoGasto from './NovoGasto';
 import NovoUsuario from './NovoUsuario';
 
 function App() {
   return (
     <div className="App">
-      <Login /><NovoUsuario />
+      <Login /><NovoGasto /><NovoUsuario />
     </div>
   );
 }
