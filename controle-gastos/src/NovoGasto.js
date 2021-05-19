@@ -33,8 +33,7 @@ export default function NovoGasto(props) {
 
     const apagar = () => {
 
-        let params = {id: "b3dc39952eb0ef0386763344c5c4bdc7", _rev: "1-0612ec1b12e30121942cd6f4587ac4ed"}
-        axios.delete(url_novo, params).then((resp) => {
+        axios.delete(url_novo + "?id=b3dc39952eb0ef0386763344c5c4bdc7&rev=1-0612ec1b12e30121942cd6f4587ac4ed").then((resp) => {
             console.log(resp.data)
         }).catch((err) => {
             console.log(err)
