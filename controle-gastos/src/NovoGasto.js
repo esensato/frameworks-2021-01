@@ -31,9 +31,20 @@ export default function NovoGasto(props) {
 
     }
 
+    const apagar = () => {
+
+        let params = {id: "b3dc39952eb0ef0386763344c5c4bdc7", _rev: "1-0612ec1b12e30121942cd6f4587ac4ed"}
+        axios.delete(url_novo, params).then((resp) => {
+            console.log(resp.data)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
     return <div>
         <Button onClick={ criar }>Novo Gasto</Button>
         <Button onClick={ listarGastos }>Listar Gastos</Button>
+        <Button onClick={ apagar }>Apagar Gastos</Button>
     </div>
 
 }
